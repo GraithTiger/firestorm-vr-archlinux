@@ -1,0 +1,22 @@
+[Desktop Entry]
+Categories=Application;Internet;Network;
+Comment[en_US]=Client for accessing 3D virtual worlds - VR Mod
+Comment=Client for accessing 3D virtual worlds - VR Mod
+Exec=/opt/firestormvr/firestorm
+GenericName[en_US]=
+GenericName=
+Icon=/opt/firestorm-vr/firestorm_icon.png
+MimeType=
+Name[en_US]=Firestorm VR
+Name=Firestorm VR
+Path=
+StartupNotify=true
+StartupWMClass=do-not-directly-run-firestorm-bin
+Terminal=false
+TerminalOptions=
+Type=Application
+X-DBUS-ServiceName=
+X-DBUS-StartupType=
+X-Desktop-File-Install-Version=3.0
+X-KDE-SubstituteUID=false
+X-KDE-Username=

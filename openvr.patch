@@ -1,0 +1,36 @@
+diff --unified --recursive --text src/firestorm-gha-6.5.6-vr-alpha-0.old/.github/3p/build-cmds/3p-openvr.autobuild.json src/firestorm-gha-6.5.6-vr-alpha-0.new/.github/3p/build-cmds/3p-openvr.autobuild.json
+--- src/3p-openvr/3p-openvr.autobuild.json	2022-07-28 13:18:04.000000000 -0500
++++ src/3p-openvr.new/3p-openvr.autobuild.json	2022-08-08 17:43:21.416650424 -0500
+@@ -8,17 +8,17 @@
+     "license": "BSD-3-Clause", "license_file": "LICENSES/openvr.txt",
+     "platforms": {
+       "common": {
+-        "configurations": {"default":{"build":{"command":"bash","options":["-c","../build-cmd.sh"]},"name":"default"}},
++        "configurations": {"default":{"build":{"command":"bash","options":["-c","../build-cmd.sh"]},"name":"default"}},
+         "manifest": [ "include/openvr.h" ],
+         "name": "common"
+       },
+-      "windows64": {
++      "linux": {
+         "build_directory": "stage",
+         "configurations": {"default":{"build":{},"default":"true","name":"default"}},
+-        "manifest": [ "lib/release/openvr_api.lib", "lib/release/openvr_api.dll" ],
+-        "name": "windows64"
++        "manifest": [ "lib/release/libopenvr_api.so" ],
++        "name": "linux"
+       }
+     },
+     "version_file": "VERSION.txt"
+   }
+-}
+\ No newline at end of file
++}
+diff --unified --recursive --text src/firestorm-gha-6.5.6-vr-alpha-0.old/.github/3p/build-cmds/3p-openvr.build-cmd.sh src/firestorm-gha-6.5.6-vr-alpha-0.new/.github/3p/build-cmds/3p-openvr.build-cmd.sh
+--- src/3p-openvr/build-cmd.sh	2022-07-28 13:18:04.000000000 -0500
++++ src/3p-openvr.new/build-cmd.sh	2022-08-08 19:05:31.352748863 -0500
+@@ -13,4 +13,4 @@
+ 
+ cp -av LICENSE stage/LICENSES/openvr.txt
+ cp -av headers/openvr.h stage/include
+-cp -av bin/win64/openvr_api.dll lib/win64/openvr_api.lib stage/lib/release/
++cp -av bin/linux64/libopenvr_api.so stage/lib/release/

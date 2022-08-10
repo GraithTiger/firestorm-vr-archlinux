@@ -1,0 +1,81 @@
+diff --unified --recursive --text '--exclude=.git' '--exclude=llviewer*' '--exclude=build-linux-x86_64' '--exclude=autobuild.xml' src/firestorm/indra/cmake/Copy3rdPartyLibs.cmake src/firestorm-vr/indra/cmake/Copy3rdPartyLibs.cmake
+--- src/firestorm/indra/cmake/Copy3rdPartyLibs.cmake	2022-08-09 23:26:36.903536358 -0500
++++ src/firestorm-vr/indra/cmake/Copy3rdPartyLibs.cmake	2022-08-10 00:18:03.091056802 -0500
+@@ -30,6 +30,8 @@
+     set(SHARED_LIB_STAGING_DIR_RELWITHDEBINFO   "${SHARED_LIB_STAGING_DIR}/RelWithDebInfo")
+     set(SHARED_LIB_STAGING_DIR_RELEASE          "${SHARED_LIB_STAGING_DIR}/Release")
+ 
++    set(openvr_src_dir ${CMAKE_SOURCE_DIR}/../openvr/bin/win64)
++    set(openvr_files openvr_api.dll)
+     #*******************************
+     # VIVOX - *NOTE: no debug version
+     set(vivox_lib_dir "${ARCH_PREBUILT_DIRS_RELEASE}")
+@@ -92,6 +94,7 @@
+     endif (USE_BUGSPLAT)
+ 
+     set(release_files ${release_files} growl++.dll growl.dll )
++    set(release_files ${release_files} openvr_api.dll )
+     if (FMODSTUDIO)
+       set(debug_files ${debug_files} fmodL.dll)
+       set(release_files ${release_files} fmod.dll)
+@@ -250,6 +253,7 @@
+         #libGLOD.so
+         libhunspell-1.3.so.0.0.0
+         libopenal.so
++        libopenvr_api.so
+         #libopenjpeg.so
+         libuuid.so.16
+         libuuid.so.16.0.22
+@@ -261,6 +265,7 @@
+     else (NOT USESYSTEMLIBS)
+       set(release_files
+         libGLOD.so
++        libopenvr_api.so
+        )
+     endif (NOT USESYSTEMLIBS)
+ 
+diff --unified --recursive --text '--exclude=.git' '--exclude=llviewer*' '--exclude=build-linux-x86_64' '--exclude=autobuild.xml' src/firestorm/indra/llcommon/indra_constants.h src/firestorm-vr/indra/llcommon/indra_constants.h
+--- src/firestorm/indra/llcommon/indra_constants.h	2022-08-09 23:26:34.740165997 -0500
++++ src/firestorm-vr/indra/llcommon/indra_constants.h	2022-08-10 00:18:03.091056802 -0500
+@@ -32,7 +32,7 @@
+ class LLUUID;
+ 
+ // <FS:Ansariel> Centralize definition of application name
+-const std::string APP_NAME = "Firestorm";
++const std::string APP_NAME = "FirestormVR";
+ 
+ static const F32 REGION_WIDTH_METERS = 256.f;
+ static const S32 REGION_WIDTH_UNITS = 256;
+diff --unified --recursive --text '--exclude=.git' '--exclude=llviewer*' '--exclude=build-linux-x86_64' '--exclude=autobuild.xml' src/firestorm/indra/newview/CMakeLists.txt src/firestorm-vr/indra/newview/CMakeLists.txt
+--- src/firestorm/indra/newview/CMakeLists.txt	2022-08-09 23:26:36.933536872 -0500
++++ src/firestorm-vr/indra/newview/CMakeLists.txt	2022-08-10 00:18:03.091056802 -0500
+@@ -61,6 +61,8 @@
+ include(jemalloc)
+ include(Discord)
+ 
++use_prebuilt_binary(openvr)
++
+ # <FS:ND> if using ndPhysicsstub this variable will be unset, we don't need to build any stub code viewer side in that case
+ if( LLPHYSICSEXTENSIONS_SRC_DIR )
+ # </FS:ND>
+@@ -2563,6 +2565,7 @@
+ 
+ if (LINUX)
+     target_link_libraries(${VIEWER_BINARY_NAME} "dl" )
++    target_link_libraries(${VIEWER_BINARY_NAME} openvr_api)
+ endif (LINUX)
+ 
+ set(ARTWORK_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH
+Only in src/firestorm-vr/indra/newview: __pycache__
+Only in src/firestorm-vr/indra/newview/res-sdl: firestorm_icon.BMP
+diff --unified --recursive --text '--exclude=.git' '--exclude=llviewer*' '--exclude=build-linux-x86_64' '--exclude=autobuild.xml' src/firestorm/indra/newview/viewer_manifest.py src/firestorm-vr/indra/newview/viewer_manifest.py
+--- src/firestorm/indra/newview/viewer_manifest.py	2022-08-09 23:26:37.020205022 -0500
++++ src/firestorm-vr/indra/newview/viewer_manifest.py	2022-08-10 01:02:33.161046737 -0500
+@@ -2034,6 +2034,7 @@
+             #self.path("libpng15.so.15.1.0") #use provided libpng to workaround incompatible system versions on some distros
+             self.path("libopenal.so", "libopenal.so.1") # Install as versioned file in case it's missing from the 3p- and won't get copied below
+             self.path("libopenal.so*")
++            self.path("libopenvr_api.so")
+             #self.path("libnotify.so.1.1.2", "libnotify.so.1") # LO - uncomment when testing libnotify(growl) on linux
+             #self.path("libpangox-1.0.so*")
+             # KLUDGE: As of 2012-04-11, the 'fontconfig' package installs
